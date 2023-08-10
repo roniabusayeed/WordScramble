@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var rootWord: String = "Rootword"
+    @State private var rootWord: String = ""
     @State private var newWord: String = ""
     @State private var usedWords: [String] = []
     
@@ -33,6 +33,7 @@ struct ContentView: View {
             .navigationTitle(rootWord)
             .navigationBarTitleDisplayMode(.inline)
             .onSubmit(addNewWord)
+            .onAppear(perform: loadWords)
         }
     }
     
@@ -53,6 +54,19 @@ struct ContentView: View {
         withAnimation {
             usedWords.insert(word, at: 0)
         }
+    }
+    
+    func loadWords() {
+        if let wordsFileUrl = Bundle.main.url(forResource: "words", withExtension: "txt") {
+            if let wordsFileContent = try? String(contentsOf: wordsFileUrl) {
+                let words = wordsFileContent.components(separatedBy: .newlines)
+                rootWord = words.randomElement() ?? "haunting"
+                return
+            }
+        }
+        
+        // Error occurred while loading.
+        fatalError("Could not load words.txt from bundle.")
     }
 }
 
