@@ -23,7 +23,10 @@ struct ContentView: View {
                 
                 Section {
                     ForEach(usedWords, id: \.self) {word in
-                        Text(word)
+                        HStack {
+                            Image(systemName: "\(word.count).circle.fill")
+                            Text(word)
+                        }
                     }
                 }
             }
@@ -35,8 +38,11 @@ struct ContentView: View {
     
     func addNewWord() {
         
-        // Normalize input word.
+        // Get a normalized copy of input word.
         let word = newWord.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        
+        // Clear new word text field for the next word entry.
+        newWord.removeAll()
         
         // Validation.
         let isNotAnEmptyWord = word.count > 0
@@ -47,9 +53,6 @@ struct ContentView: View {
         withAnimation {
             usedWords.insert(word, at: 0)
         }
-        
-        // Clear new word text field for the next word entry.
-        newWord.removeAll()
     }
 }
 
