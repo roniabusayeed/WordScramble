@@ -17,6 +17,8 @@ struct ContentView: View {
     @State private var errorTitle = ""
     @State private var errorMessage = ""
     
+//    @State private var score: Int = 0
+    
     var body: some View {
         NavigationView {
             List {
@@ -38,6 +40,17 @@ struct ContentView: View {
             .navigationBarTitleDisplayMode(.inline)
             .onSubmit(addNewWord)
             .onAppear(perform: loadWords)
+//            .toolbar {
+//                ToolbarItem(placement: .navigationBarLeading) {
+//                    Text("Score: \(score)")
+//                        .foregroundColor(.red)
+//                }
+//            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Restart", role: .cancel, action: restart)
+                }
+            }
             
             .alert(errorTitle, isPresented: $showingError) {
                 Button("OK", role: .cancel) {}
@@ -45,6 +58,11 @@ struct ContentView: View {
                 Text(errorMessage)
             }
         }
+    }
+    
+    func restart() {
+        usedWords.removeAll()
+        loadWords()
     }
     
     func addNewWord() {
