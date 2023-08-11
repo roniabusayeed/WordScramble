@@ -17,7 +17,9 @@ struct ContentView: View {
     @State private var errorTitle = ""
     @State private var errorMessage = ""
     
-//    @State private var score: Int = 0
+    let pointsPerNewWord = 10
+    let pointsPerLetterInAWord = 1
+    @State private var score = 0
     
     var body: some View {
         NavigationView {
@@ -40,12 +42,12 @@ struct ContentView: View {
             .navigationBarTitleDisplayMode(.inline)
             .onSubmit(addNewWord)
             .onAppear(perform: loadWords)
-//            .toolbar {
-//                ToolbarItem(placement: .navigationBarLeading) {
-//                    Text("Score: \(score)")
-//                        .foregroundColor(.red)
-//                }
-//            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Text("Score: \(score)")
+                        .foregroundColor(.red)
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Restart", role: .cancel, action: restart)
@@ -63,6 +65,7 @@ struct ContentView: View {
     func restart() {
         usedWords.removeAll()
         loadWords()
+        score = 0
     }
     
     func addNewWord() {
@@ -112,6 +115,9 @@ struct ContentView: View {
         withAnimation {
             usedWords.insert(word, at: 0)
         }
+        
+        // Update score.
+        score += pointsPerNewWord + word.count * pointsPerLetterInAWord
     }
     
     func wordError(_ title: String, _ message: String) {
