@@ -63,6 +63,16 @@ struct ContentView: View {
             return
         }
         
+        // Disallow words that are shorter than three letters or just our root word.
+        guard word.count >= 3 else {
+            wordError("Word too short", "Please enter a longer word")
+            return
+        }
+        guard word != rootWord else {
+            wordError("Not root word", "Please try words other than the root word")
+            return
+        }
+        
         // Word validation.
         // Is the word original? I.e. hasn't been used already by the user.
         // Is the word possible? I.e. can be constructed using the characters from the root word.
